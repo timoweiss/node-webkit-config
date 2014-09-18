@@ -31,14 +31,16 @@ var config = module.exports = function(nwGui, file, content) {
     } else if (arguments.length >= 3) {
         return config.set(file, content);
     }
-
-    return config;
 };
 
 config.get = function(file) {
 
 };
 
+config.set = function(file, content) {
+    var _path = path.resolve(fullConfigPath, file);
+
+};
 config._getAppDataPath = function() {
     if (!_nwGui) {
         throw new Error('not inside a node-webkit env');
@@ -56,7 +58,6 @@ config.createConfigDir = function(configDirName) {
 
 config._setConfigDirPath = function(configDirName) {
     _configDirName = configDirName || 'config';
-    fullConfigPath = path.resolve(_getAppDataPath(), _configDirName);
     if (!fs.existsSync(fullConfigPath)) {
         fs.mkdirSync(fullConfigPath);
     }
