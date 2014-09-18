@@ -9,42 +9,43 @@ var fullConfigPath = null;
 var confFilePath = null;
 var confString = null;
 
-var _configMock = '{"profile":{"firstname":"Timo","surname":"Weiß","email":"info@timo-weiss.com","timezone":"","image":""},"preferences":{"askBeforeDelete":true,"undoredo":true},"notifications":{"otherUserOnline":true,"otherUserOffline":true,"updateAvailable":true,"changes":true},"hiddenPreferences":{"windowWith":1000,"windowHeight":700,"windowPosition":{"top":300,"left":300}}}'
+var _configMock = '{"profile":{"firstname":"Timo","surname":"Weiß","email":"info@timo-weiss.com","timezone":"","image":""},"preferences":{"askBeforeDelete":true,"undoredo":true},"notifications":{"otherUserOnline":true,"otherUserOffline":true,"updateAvailable":true,"changes":true},"hiddenPreferences":{"windowWith":1000,"windowHeight":700,"windowPosition":{"top":300,"left":300}}}';
 _configMock = JSON.parse(_configMock);
 
-function init(nwGui) {
+var config = module.exports = function(nwGui) {
     if (!nwGui) {
         throw new Error('need nwGui instance');
     }
     _nwGui = nwGui;
+    fullConfigPath = _getAppDataPath();
     return init;
-}
+};
 
-function _getAppDataPath() {
+config._getAppDataPath = function() {
     if (!_nwGui) {
         throw new Error('not inside a node-webkit env');
     }
     return _nwGui.App.dataPath;
-}
+};
 
-function createConfigDir(configDirName) {
+config.createConfigDir = function(configDirName) {
     if (!_nwGui) {
         throw new Error('nw.gui not initialized');
     }
     confFilePath = _setConfigDirPath(configDirName);
     return confFilePath;
-}
+};
 
-function _setConfigDirPath(configDirName) {
+config._setConfigDirPath = function(configDirName) {
     _configDirName = configDirName || 'config';
     fullConfigPath = path.resolve(_getAppDataPath(), _configDirName);
     if (!fs.existsSync(fullConfigPath)) {
         fs.mkdirSync(fullConfigPath);
     }
     return fullConfigPath;
-}
+};
 
-function getConfig(configPath, callback) {
+config.getConfig = function(configPath, callback) {
     if (!confFilePath) {
         createConfigDir();
     }
@@ -70,10 +71,10 @@ function getConfig(configPath, callback) {
     } else {
         fs.readFile(configPath, 'utf-8', callback);
     }
-}
+};
 
 
-function saveConfig(config, callback) {
+config.saveConfig = function(config, callback) {
     var _config = null;
     if (!config) {
         callback('illegal params - saveConfig()');
@@ -94,9 +95,4 @@ function saveConfig(config, callback) {
     fs.writeFile(fullConfigPath + '/config.json', _config, function(err) {
         callback(err);
     });
-}
-
-module.exports.init = init;
-module.exports.createConfigDir = createConfigDir;
-module.exports.getConfig = getConfig;
-module.exports.saveConfig = saveConfig;
+};
