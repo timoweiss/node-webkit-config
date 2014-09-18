@@ -3,22 +3,40 @@
 var _nwGui = null;
 var fs = require('fs');
 var path = require('path');
+var q = require('q');
 
 var _configDirName = null;
 var fullConfigPath = null;
 var confFilePath = null;
 var confString = null;
 
+var defaultConfigPath = '/config.json';
+
 var _configMock = '{"profile":{"firstname":"Timo","surname":"Weiß","email":"info@timo-weiss.com","timezone":"","image":""},"preferences":{"askBeforeDelete":true,"undoredo":true},"notifications":{"otherUserOnline":true,"otherUserOffline":true,"updateAvailable":true,"changes":true},"hiddenPreferences":{"windowWith":1000,"windowHeight":700,"windowPosition":{"top":300,"left":300}}}';
 _configMock = JSON.parse(_configMock);
 
-var config = module.exports = function(nwGui) {
+var config = module.exports = function(nwGui, file, content) {
     if (!nwGui) {
         throw new Error('need nwGui instance');
     }
     _nwGui = nwGui;
-    fullConfigPath = _getAppDataPath();
-    return init;
+    fullConfigPath = config._getAppDataPath();
+
+    if (arguments.length === 2) {
+        if (arguments[1] === typeof 'string') {
+            return config.get(file);
+        } else if (arguments[1] === typeof 'object') {
+            return config.set(defaultConfigPath, arguments[1]);
+        }
+    } else if (arguments.length >= 3) {
+        return config.set(file, content);
+    }
+
+    return config;
+};
+
+config.get = function(file) {
+
 };
 
 config._getAppDataPath = function() {
