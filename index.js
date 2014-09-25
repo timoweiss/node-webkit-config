@@ -28,23 +28,14 @@ var config = module.exports = function(file, content) {
     if(!argLength) {
         return config.get();
     }
-    if (argLength === 2) {
-        if (arguments[1] === typeof 'string') {
-            return config.get(file);
-        } else if (arguments[1] === typeof 'object') {
-            return config.set(defaultConfigPath, arguments[1]);
-        }
-    } else if (arguments.length >= 3) {
-        return config.set(file, content);
-    }
 };
 
 config.get = function(file) {
     var _path = null;
     if(!file) {
-       _path = path.resolve(fullConfigPath, defaultConfigFile);
+        _path = path.resolve(fullConfigPath, defaultConfigFile);
     } else {
-       _path = path.resolve(fullConfigPath, file);
+        _path = path.resolve(fullConfigPath, file);
     }
     return _get(_path);
 };
@@ -70,6 +61,5 @@ function _get(configPath) {
         }
     });
     return deferred.promise;
-
 }
 
