@@ -10,7 +10,12 @@ global.app = {
 };
 
 // set individual path
-nwc.setPath('myData/path', 'config.json', 'indiConf', {defaultVal: 'myVal'})
+var indiConf = {
+        path: 'myData/path',
+        file: 'config.json',
+        name: 'indiConf'
+    };
+nwc.setPath(indiConf, {defaultVal: 'myVal'})
     .then(function() {
         console.log('success');
     });
