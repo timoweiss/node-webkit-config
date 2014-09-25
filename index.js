@@ -5,6 +5,8 @@ var fs = require('fs');
 var path = require('path');
 var q = require('q');
 
+var staticData = require('./lib/static.js');
+
 var _configDirName = null;
 var fullConfigPath = null;
 var confFilePath = null;
@@ -12,18 +14,18 @@ var confString = null;
 
 var defaultConfigPath = '/config.json';
 
-var _configMock = '{"profile":{"firstname":"Timo","surname":"Weiß","email":"info@timo-weiss.com","timezone":"","image":""},"preferences":{"askBeforeDelete":true,"undoredo":true},"notifications":{"otherUserOnline":true,"otherUserOffline":true,"updateAvailable":true,"changes":true},"hiddenPreferences":{"windowWith":1000,"windowHeight":700,"windowPosition":{"top":300,"left":300}}}';
-_configMock = JSON.parse(_configMock);
+var _configMock = staticData.configMock;
 
-var config = module.exports = function(nwGui, file, content) {
-    if (!nwGui) {
+var config = module.exports = function(file, content) {
+    if (!app || !app.gui) {
         throw new Error('need nwGui instance');
     }
-    _nwGui = nwGui;
+    _nwGui = app.gui;
     fullConfigPath = config._getAppDataPath();
 
     if (arguments.length === 2) {
         if (arguments[1] === typeof 'string') {
+            console.log('arg 1 is', file)
             return config.get(file);
         } else if (arguments[1] === typeof 'object') {
             return config.set(defaultConfigPath, arguments[1]);
@@ -34,7 +36,11 @@ var config = module.exports = function(nwGui, file, content) {
 };
 
 config.get = function(file) {
-
+    return {
+        then: function(fn) {
+            fn(arguments);
+        }
+    };
 };
 
 config.set = function(file, content) {
