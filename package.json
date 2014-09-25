@@ -1,11 +1,14 @@
 {
-    "name": "node-webkit-config",
-    "version": "0.0.3",
-    "description": "helper to persist config data inside a node-webkit project",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "Timo Weiß",
-    "license": "MIT"
+  "name": "node-webkit-config",
+  "version": "0.0.3",
+  "description": "helper to persist config data inside a node-webkit project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Timo Weiß",
+  "license": "MIT",
+  "dependencies": {
+    "q": "^1.0.1"
+  }
 }
