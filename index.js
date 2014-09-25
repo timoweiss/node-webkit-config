@@ -3,7 +3,7 @@
 var _nwGui = null;
 var fs = require('fs');
 var path = require('path');
-var q = require('q');
+var Q = require('q');
 
 var staticData = require('./lib/static.js');
 
@@ -12,7 +12,7 @@ var fullConfigPath = null;
 var confFilePath = null;
 var confString = null;
 
-var defaultConfigPath = '/config.json';
+var defaultConfigFile = 'config.json';
 
 var _configMock = staticData.configMock;
 
@@ -22,8 +22,13 @@ var config = module.exports = function(file, content) {
     }
     _nwGui = app.gui;
     fullConfigPath = config._getAppDataPath();
+    var argLength = arguments.length;
 
-    if (arguments.length === 2) {
+    // get config from default path
+    if(!argLength) {
+        return config.get();
+    }
+    if (argLength === 2) {
         if (arguments[1] === typeof 'string') {
             return config.get(file);
         } else if (arguments[1] === typeof 'object') {
@@ -35,11 +40,13 @@ var config = module.exports = function(file, content) {
 };
 
 config.get = function(file) {
-    return {
-        then: function(fn) {
-            fn(arguments);
-        }
-    };
+    var _path = null;
+    if(!file) {
+       _path = path.resolve(fullConfigPath, defaultConfigFile);
+    } else {
+       _path = path.resolve(fullConfigPath, file);
+    }
+    return _get(_path);
 };
 
 config.set = function(file, content) {
@@ -48,75 +55,21 @@ config.set = function(file, content) {
 };
 config._getAppDataPath = function() {
     if (!_nwGui) {
-        throw new Error('not inside a node-webkit env');
+        throw new Error('global app.gui is not set');
     }
     return _nwGui.App.dataPath;
 };
 
-config.createConfigDir = function(configDirName) {
-    if (!_nwGui) {
-        throw new Error('nw.gui not initialized');
-    }
-    confFilePath = _setConfigDirPath(configDirName);
-    return confFilePath;
-};
-
-config._setConfigDirPath = function(configDirName) {
-    _configDirName = configDirName || 'config';
-    if (!fs.existsSync(fullConfigPath)) {
-        fs.mkdirSync(fullConfigPath);
-    }
-    return fullConfigPath;
-};
-
-config.getConfig = function(configPath, callback) {
-    if (!confFilePath) {
-        config.createConfigDir();
-    }
-    // if (!configPath) {
-    //     throw new TypeError('configPath not set');
-    // }
-    configPath = configPath || createConfigDir();
-    if (configPath.indexOf('.json') === -1) {
-        configPath = path.resolve(configPath, 'config.json');
-    }
-
-    if (!fs.existsSync(configPath)) {
-        confString = JSON.stringify(_configMock);
-        fs.writeFile(configPath, confString, function(err) {
-            if (err) {
-                console.log(err);
-                callback(err);
-            } else {
-                console.log("The file was saved!");
-                callback(null, confString);
-            }
-        });
-    } else {
-        fs.readFile(configPath, 'utf-8', callback);
-    }
-};
-
-
-config.saveConfig = function(config, callback) {
-    var _config = null;
-    if (!config) {
-        callback('illegal params - saveConfig()');
-    }
-    if (!fullConfigPath) {
-        getConfig(_setConfigDirPath());
-    }
-    if (typeof config !== 'string') {
-        try {
-            _config = JSON.stringify(config);
-        } catch (e) {
-            callback(e);
-            return;
+function _get(configPath) {
+    var deferred = Q.defer();
+    fs.readFile(configPath, function(err, data){
+        if(err) {
+            deferred.reject(err);
+        } else {
+            deferred.resolve(data);
         }
-    } else {
-        _config = config;
-    }
-    fs.writeFile(fullConfigPath + '/config.json', _config, function(err) {
-        callback(err);
     });
-};
+    return deferred.promise;
+
+}
+
