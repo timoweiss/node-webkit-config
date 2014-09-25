@@ -7,16 +7,14 @@ var Q = require('q');
 
 var staticData = require('./lib/static.js');
 
-var _configDirName = null;
 var fullConfigPath = null;
-var confFilePath = null;
-var confString = null;
+var indiConfigs = {};
 
 var defaultConfigFile = 'config.json';
 
 var _configMock = staticData.configMock;
 
-var config = module.exports = function(file, content) {
+var config = module.exports = function() {
     if (!app || !app.gui) {
         throw new Error('global app.gui is not set');
     }
@@ -27,8 +25,18 @@ var config = module.exports = function(file, content) {
     // get config from default path
     if(!argLength) {
         return config.get();
+    } else if(argLength === 1 && typeof arguments[0] === 'object') {
+        // save object
+        return config.set(arguments[0]);
+    } else if(argLength === 1 && typeof arguments[0] === 'string') {
+        // return
+        return config.get(arguments[0]);
     }
 };
+
+function _getDefaultFilePath() {
+    return path.resolve(fullConfigPath, defaultConfigFile);
+}
 
 function _get(configPath) {
     var deferred = Q.defer();
@@ -42,17 +50,17 @@ function _get(configPath) {
     return deferred.promise;
 }
 
-config.get = function(file) {
+config.get = function(indiFileKey) {
     var _path = null;
-    if(!file) {
-        _path = path.resolve(fullConfigPath, defaultConfigFile);
+    if(!indiFileKey) {
+        _path = _getDefaultFilePath();
     } else {
-        _path = path.resolve(fullConfigPath, file);
+        _path = path.resolve(indiConfigs[indiFileKey]);
     }
     return _get(_path);
 };
 
-config.set = function(file, content) {
+config.set = function(content) {
     var _path = path.resolve(fullConfigPath, file);
 
 };
@@ -62,3 +70,4 @@ config._getAppDataPath = function() {
     }
     return _nwGui.App.dataPath;
 };
+
