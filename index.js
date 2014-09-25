@@ -30,6 +30,18 @@ var config = module.exports = function(file, content) {
     }
 };
 
+function _get(configPath) {
+    var deferred = Q.defer();
+    fs.readFile(configPath, function(err, data){
+        if(err) {
+            deferred.reject(err);
+        } else {
+            deferred.resolve(data);
+        }
+    });
+    return deferred.promise;
+}
+
 config.get = function(file) {
     var _path = null;
     if(!file) {
@@ -50,16 +62,3 @@ config._getAppDataPath = function() {
     }
     return _nwGui.App.dataPath;
 };
-
-function _get(configPath) {
-    var deferred = Q.defer();
-    fs.readFile(configPath, function(err, data){
-        if(err) {
-            deferred.reject(err);
-        } else {
-            deferred.resolve(data);
-        }
-    });
-    return deferred.promise;
-}
-
