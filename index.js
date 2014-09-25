@@ -25,7 +25,6 @@ var config = module.exports = function(file, content) {
 
     if (arguments.length === 2) {
         if (arguments[1] === typeof 'string') {
-            console.log('arg 1 is', file)
             return config.get(file);
         } else if (arguments[1] === typeof 'object') {
             return config.set(defaultConfigPath, arguments[1]);
@@ -72,7 +71,7 @@ config._setConfigDirPath = function(configDirName) {
 
 config.getConfig = function(configPath, callback) {
     if (!confFilePath) {
-        createConfigDir();
+        config.createConfigDir();
     }
     // if (!configPath) {
     //     throw new TypeError('configPath not set');
