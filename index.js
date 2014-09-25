@@ -18,7 +18,7 @@ var _configMock = staticData.configMock;
 
 var config = module.exports = function(file, content) {
     if (!app || !app.gui) {
-        throw new Error('need nwGui instance');
+        throw new Error('global app.gui is not set');
     }
     _nwGui = app.gui;
     fullConfigPath = config._getAppDataPath();
