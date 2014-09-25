@@ -4,14 +4,31 @@
 
 ```js
 var nwc = require('node-webkit-config');
-var nwGui = require('nw.gui');
+// provide the nw.gui globally
+global.app = {
+    gui: require('nw.gui')
+};
 
-var config = nwc(nwGui, 'myConfig.json', {name: 'timo'})
+// set individual path
+nwc.setPath('myData/path', 'config.json', 'indiConf', {defaultVal: 'myVal'})
     .then(function() {
-        console.log(arguments);
+        console.log('success');
     });
 
-nwc(nwGui, 'myConfig.json')
+// get object from individual path
+nwc('indiConf')
+    .then(function(config) {
+        console.log(config);
+    });
+
+// set data
+nwc({name: 'timo'})
+    .then(function() {
+        console.log('success');
+    });
+    
+// get data
+nwc()
     .then(function(config) {
         console.log(config.name);
     });
