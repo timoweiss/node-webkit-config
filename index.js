@@ -46,7 +46,13 @@ function _get(configPath) {
         if (err) {
             deferred.reject(err);
         } else {
-            deferred.resolve(data.toString());
+            var parsedData = null;
+            try {
+                parsedData = JSON.parse(data);
+            } catch (e) {
+                return deferred.reject(e);
+            }
+            deferred.resolve(parsedData);
         }
     });
     return deferred.promise;
