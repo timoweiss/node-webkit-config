@@ -9,6 +9,7 @@
   "author": "Timo Weiß",
   "license": "MIT",
   "dependencies": {
+    "mkdirp": "^0.5.0",
     "q": "^1.0.1"
   },
   "devDependencies": {

@@ -4,6 +4,7 @@ var _nwGui = null;
 var fs = require('fs');
 var path = require('path');
 var Q = require('q');
+var mkdirp = require('mkdirp');
 
 var staticData = require('./lib/static.js');
 
