@@ -50,6 +50,22 @@ function _get(configPath) {
     return deferred.promise;
 }
 
+function _set(filePath, content) {
+    var deferred = Q.defer();
+
+    function writeFile(filePath, content) {
+        fs.writeFile(filePath, content, function(err){
+            if(err) {
+                deferred.reject(err);
+            } else {
+                deferred.resolve();
+            }
+        });
+    }
+    writeFile(filePath, content);
+    return deferred.promise;
+}
+
 config.get = function(indiFileKey) {
     var _path = null;
     if(!indiFileKey) {
@@ -61,9 +77,25 @@ config.get = function(indiFileKey) {
 };
 
 config.set = function(content) {
-    var _path = path.resolve(fullConfigPath, file);
-
+    if(!content || typeof content !== 'object') {
+        throw new Error('illegal params: set(config)');
+    }
+    var _content = null;
+    try {
+        _content = JSON.stringify(content);
+    } catch (e) {
+        throw new Error('illegal object: set(config)', e);
+    }
+    var _path = _getDefaultFilePath();
+    return _set(_path, content);
 };
+
+config.setPath = function(opt, data) {
+    if(!opt || !data) {
+        throw new Error('illegal params: setPath(opt, data)');
+    }
+};
+
 config._getAppDataPath = function() {
     if (!_nwGui) {
         throw new Error('global app.gui is not set');
