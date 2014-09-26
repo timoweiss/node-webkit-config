@@ -21,6 +21,7 @@
     "globals" : {
         "module": true,
         "app": true,
-        "describe": true
+        "describe": true,
+        "it": true
     }
 }
