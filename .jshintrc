@@ -20,6 +20,7 @@
     "smarttabs": true,
     "globals" : {
         "module": true,
-        "app": true
+        "app": true,
+        "describe": true
     }
 }
