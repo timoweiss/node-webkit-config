@@ -23,12 +23,12 @@ var config = module.exports = function() {
     var argLength = arguments.length;
 
     // get config from default path
-    if(!argLength) {
+    if (!argLength) {
         return config.get();
-    } else if(argLength === 1 && typeof arguments[0] === 'object') {
+    } else if (argLength === 1 && typeof arguments[0] === 'object') {
         // save object
         return config.set(arguments[0]);
-    } else if(argLength === 1 && typeof arguments[0] === 'string') {
+    } else if (argLength === 1 && typeof arguments[0] === 'string') {
         // return
         return config.get(arguments[0]);
     }
@@ -40,8 +40,8 @@ function _getDefaultFilePath() {
 
 function _get(configPath) {
     var deferred = Q.defer();
-    fs.readFile(configPath, function(err, data){
-        if(err) {
+    fs.readFile(configPath, function(err, data) {
+        if (err) {
             deferred.reject(err);
         } else {
             deferred.resolve(data);
@@ -54,8 +54,8 @@ function _set(filePath, content) {
     var deferred = Q.defer();
 
     function writeFile(filePath, content) {
-        fs.writeFile(filePath, content, function(err){
-            if(err) {
+        fs.writeFile(filePath, content, function(err) {
+            if (err) {
                 deferred.reject(err);
             } else {
                 deferred.resolve();
@@ -68,7 +68,7 @@ function _set(filePath, content) {
 
 config.get = function(indiFileKey) {
     var _path = null;
-    if(!indiFileKey) {
+    if (!indiFileKey) {
         _path = _getDefaultFilePath();
     } else {
         _path = path.resolve(indiConfigs[indiFileKey]);
@@ -77,7 +77,7 @@ config.get = function(indiFileKey) {
 };
 
 config.set = function(content) {
-    if(!content || typeof content !== 'object') {
+    if (!content || typeof content !== 'object') {
         throw new Error('illegal params: set(config)');
     }
     var _content = null;
@@ -91,7 +91,7 @@ config.set = function(content) {
 };
 
 config.setPath = function(opt, data) {
-    if(!opt || !data) {
+    if (!opt || !data) {
         throw new Error('illegal params: setPath(opt, data)');
     }
 };
@@ -102,4 +102,3 @@ config._getAppDataPath = function() {
     }
     return _nwGui.App.dataPath;
 };
-
