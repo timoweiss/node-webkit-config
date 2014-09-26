@@ -25,12 +25,14 @@ var config = module.exports = function() {
     // get config from default path
     if (!argLength) {
         return config.get();
-    } else if (argLength === 1 && typeof arguments[0] === 'object') {
-        // save object
-        return config.set(arguments[0]);
-    } else if (argLength === 1 && typeof arguments[0] === 'string') {
-        // return
-        return config.get(arguments[0]);
+    } else if (argLength === 1) {
+        if (typeof arguments[0] === 'object') {
+            // save object
+            return config.set(arguments[0]);
+        } else if (typeof arguments[0] === 'string') {
+            // return
+            return config.get(arguments[0]);
+        }
     }
 };
 
@@ -44,7 +46,7 @@ function _get(configPath) {
         if (err) {
             deferred.reject(err);
         } else {
-            deferred.resolve(data);
+            deferred.resolve(data.toString());
         }
     });
     return deferred.promise;
@@ -87,7 +89,7 @@ config.set = function(content) {
         throw new Error('illegal object: set(config)', e);
     }
     var _path = _getDefaultFilePath();
-    return _set(_path, content);
+    return _set(_path, _content);
 };
 
 config.setPath = function(opt, data) {
