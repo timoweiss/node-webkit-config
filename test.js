@@ -3,6 +3,11 @@
 var assert = require('assert');
 var config = require('./index');
 
+var app = {};
+app.gui = {};
+app.gui.App = {};
+app.gui.App.dataPath = '/testTmp';
+
 describe('my test', function() {
     describe('config definitions', function() {
         it('config should be an function', function() {
