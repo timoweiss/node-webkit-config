@@ -1,5 +1,16 @@
 ## EARLY STATE - GO AWAY :)
 
+This module is a thin wrapper around node's filesystem. You can persist data in the users dataPath.
+You need to make the nw.gui globally accessable via:
+
+```js
+global.app = {
+    gui: require(nw.gui)
+};
+```
+
+Make sure that this is set before you make your first call!
+
 ## Usage
 
 ```js
@@ -9,6 +20,22 @@ global.app = {
     gui: require('nw.gui')
 };
 
+// set data
+nwc({name: 'timo'})
+    .then(function() {
+        console.log('success');
+    });
+    
+// get data
+nwc()
+    .then(function(config) {
+        console.log(config.name);
+    });
+```
+
+#### not done yet
+
+```js
 // set individual path
 var indiConf = {
         path: 'myData/path',
@@ -24,17 +51,5 @@ nwc.setPath(indiConf, {defaultVal: 'myVal'})
 nwc('indiConf')
     .then(function(config) {
         console.log(config);
-    });
-
-// set data
-nwc({name: 'timo'})
-    .then(function() {
-        console.log('success');
-    });
-    
-// get data
-nwc()
-    .then(function(config) {
-        console.log(config.name);
     });
 ```
