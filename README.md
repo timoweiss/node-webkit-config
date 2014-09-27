@@ -13,7 +13,7 @@ Make sure that this is set before you make your first call!
 
 #### dataPath
 
-See (node-webkit-wiki)[https://github.com/rogerwang/node-webkit/wiki/App#datapath] for further information
+See [node-webkit-wiki](https://github.com/rogerwang/node-webkit/wiki/App#datapath) for further information
 
 ## Usage
 
