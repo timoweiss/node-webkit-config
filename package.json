@@ -1,18 +1,18 @@
 {
-  "name": "node-webkit-config",
-  "version": "0.0.3",
-  "description": "helper to persist config data inside a node-webkit project",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha test.js"
-  },
-  "author": "Timo Weiß",
-  "license": "MIT",
-  "dependencies": {
-    "mkdirp": "^0.5.0",
-    "q": "^1.0.1"
-  },
-  "devDependencies": {
-    "mocha": "^1.21.4"
-  }
+    "name": "node-webkit-config",
+    "version": "0.1.0",
+    "description": "helper to persist config data inside a node-webkit project",
+    "main": "index.js",
+    "scripts": {
+        "test": "mocha test.js"
+    },
+    "author": "Timo Weiß",
+    "license": "MIT",
+    "dependencies": {
+        "mkdirp": "^0.5.0",
+        "q": "^1.0.1"
+    },
+    "devDependencies": {
+        "mocha": "^1.21.4"
+    }
 }
