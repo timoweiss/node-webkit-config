@@ -99,10 +99,15 @@ config.set = function(content) {
     return _set(_path, _content);
 };
 
+// TODO
 config.setPath = function(opt, data) {
-    if (!opt || !data) {
+    if (!opt || !opt.path || !opt.file || !opt.name || !data) {
         throw new Error('illegal params: setPath(opt, data)');
     }
+
+
+    return Q.defer().promise;
+
 };
 
 config._getAppDataPath = function() {
